@@ -1,312 +1,69 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  albumQuestions,
-  type AlbumQuestion,
-} from "../../data/albumQuestions";
+  createRound,
+  type GameQuestion,
+} from "./emojiGameService";
 
 type AlbumGameProps = {
   onBack: () => void;
 };
 
-
-const illustrations: Record<string, string> = {
-  // Animales
-  Perro: "🐶",
-  Gato: "🐱",
-  Conejo: "🐰",
-  León: "🦁",
-  Tigre: "🐯",
-  Leopardo: "🐆",
-  Caballo: "🐴",
-  Burro: "🫏",
-  Oveja: "🐑",
-  Águila: "🦅",
-  Paloma: "🕊️",
-  Gorrión: "🐦",
-  Rana: "🐸",
-  Sapo: "🐸",
-  Salamandra: "🦎",
-  Vaca: "🐮",
-  Cerdo: "🐷",
-  Gallina: "🐔",
-  Tortuga: "🐢",
-  Pez: "🐟",
-  Delfín: "🐬",
-  Tiburón: "🦈",
-  Pulpo: "🐙",
-  Calamar: "🦑",
-  Sepia: "🦑",
-  Mariposa: "🦋",
-  Abeja: "🐝",
-  Hormiga: "🐜",
-  Escarabajo: "🪲",
-  Saltamontes: "🦗",
-  Libélula: "🪰",
-
-  // Frutas y verduras
-  Manzana: "🍎",
-  Plátano: "🍌",
-  Pera: "🍐",
-  Zanahoria: "🥕",
-  Naranja: "🍊",
-  Fresa: "🍓",
-  Melocotón: "🍑",
-  Ciruela: "🫐",
-  Lechuga: "🥬",
-  Pepino: "🥒",
-  Calabacín: "🥒",
-  Berenjena: "🍆",
-  Cereza: "🍒",
-  Uva: "🍇",
-  Sandía: "🍉",
-  Melón: "🍈",
-  Patata: "🥔",
-  Mandarina: "🍊",
-  Cebolla: "🧅",
-  Calabaza: "🎃",
-
-  // Ropa y accesorios
-  Camiseta: "👕",
-  Pantalón: "👖",
-  Zapato: "👟",
-  Abrigo: "🧥",
-  Chaqueta: "🧥",
-  Jersey: "🧶",
-  Gorra: "🧢",
-  Sombrero: "👒",
-  Visera: "🧢",
-  Calcetín: "🧦",
-  Bufanda: "🧣",
-  Pijama: "🛌",
-  Camisón: "👗",
-
-  // Transportes
-  Avión: "✈️",
-  Barco: "🚢",
-  Bicicleta: "🚲",
-  Coche: "🚗",
-  Autobús: "🚌",
-  Camión: "🚚",
-  Tren: "🚆",
-  Metro: "🚇",
-  Tranvía: "🚊",
-  Patinete: "🛴",
-
-  // Colegio
-  Lápiz: "✏️",
-  Cuaderno: "📓",
-  Regla: "📏",
-  Tijeras: "✂️",
-  Pegamento: "🧴",
-  Cartulina: "📃",
-  Pizarra: "🧑‍🏫",
-  Tiza: "🖍️",
-  Borrador: "🧽",
-  Almuerzo: "🥪",
-
-  // Cocina y utensilios
-  Cuchara: "🥄",
-  Tenedor: "🍴",
-  Plato: "🍽️",
-  Cuchillo: "🔪",
-  Cazuela: "🍲",
-  Sartén: "🍳",
-  Olla: "🍲",
-  Cazo: "🥣",
-  Pelota: "⚽",
-  Microondas: "📡",
-
-  // Instrumentos musicales
-  Guitarra: "🎸",
-  Piano: "🎹",
-  Tambor: "🥁",
-  Violín: "🎻",
-  Viola: "🎻",
-  Violonchelo: "🎻",
-  Cepillo: "🪥",
-  Melodía: "🎶",
-  Ritmo: "🥁",
-  Canción: "🎵",
-
-  // Cuerpo humano
-  Mano: "✋",
-  Pie: "🦶",
-  Nariz: "👃",
-  Ojo: "👁️",
-  Oreja: "👂",
-  Boca: "👄",
-  Ventana: "🪟",
-
-  // Muebles y casa
-  Silla: "🪑",
-  Mesa: "🪵",
-  Cama: "🛏️",
-  Sofá: "🛋️",
-  Sillón: "🪑",
-  Taburete: "🪑",
-  Armario: "🚪",
-  Puerta: "🚪",
-  Tejado: "🏠",
-  Estantería: "📚",
-
-  // Tiempo atmosférico y naturaleza
-  Sol: "☀️",
-  Nube: "☁️",
-  Lluvia: "🌧️",
-  Nieve: "❄️",
-  Granizo: "🧊",
-  Llovizna: "🌦️",
-  Flor: "🌸",
-  Árbol: "🌳",
-  Hoja: "🍃",
-  Río: "🏞️",
-  Lago: "🌊",
-  Cascada: "💦",
-
-  // Aseo personal y baño
-  "Cepillo de dientes": "🪥",
-  Jabón: "🧼",
-  Toalla: "🧻",
-  Champú: "🧴",
-  Acondicionador: "🧴",
-  Peine: "🪮",
-  Lavabo: "🚰",
-  Bañera: "🛁",
-  Ducha: "🚿",
-
-  // Herramientas
-  Martillo: "🔨",
-  Serrucho: "🪚",
-  Destornillador: "🪛",
-  Alicates: "🗜️",
-  "Llave inglesa": "🔧",
-  Taladro: "🛠️",
-  Regadera: "🚿",
-  Pala: "🪏",
-  Rastrillo: "🧹",
-
-  // Alimentos
-  Pan: "🍞",
-  Queso: "🧀",
-  Huevo: "🥚",
-  Arroz: "🍚",
-  Pasta: "🍝",
-  Lentejas: "🥣",
-  Leche: "🥛",
-  Tostada: "🍞",
-  Cereales: "🥣",
-  Yogur: "🥣",
-  Galleta: "🍪",
-
-  // Dormitorio
-  Almohada: "🛏️",
-  Manta: "🧣",
-  Mesilla: "🛏️",
-  Edredón: "🛌",
-  Sábana: "🛏️",
-
-  // Deportes y protección
-  Balón: "⚽",
-  Raqueta: "🏸",
-  Patín: "🛼",
-  "Guantes de boxeo": "🥊",
-  Casco: "⛑️",
-  "Protector bucal": "🥋",
-
-  // Tecnología
-  Teléfono: "📱",
-  Ordenador: "💻",
-  Tableta: "📲",
-  Teclado: "⌨️",
-  Ratón: "🖱️",
-  Monitor: "🖥️",
-
-  // Profesiones y salud
-  Estetoscopio: "🩺",
-  Termómetro: "🌡️",
-  Vendas: "🩹",
-
-  // Jardín y playa
-  Maceta: "🪴",
-  Sombrilla: "⛱️",
-  Cubo: "🪣",
-  "Palas de playa": "🏖️",
-
-  // Otros objetos y conceptos
-  Semáforo: "🚦",
-  Zapatero: "👞",
-  Escalera: "🪜",
-  Círculo: "⭕",
-  Triángulo: "🔺",
-  Cuadrado: "🟦",
-  Azul: "🔵",
-  Radio: "📻",
-  Televisión: "📺",
-  Periódico: "📰",
-  Hospital: "🏥",
-  Biblioteca: "📚",
-  Ayuntamiento: "🏛️",
-  Alegría: "😄",
-  Tristeza: "😢",
-  Enfado: "😠",
-  Luna: "🌙",
-  Planeta: "🪐",
-  Estrella: "⭐",
-};
-
-
-
-function shuffle<T>(items: T[]): T[] {
-  const result: T[] = [...items];
-
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-
-  return result;
-}
-
-function createRound(count = 10): AlbumQuestion[] {
-  const shuffledQuestions = shuffle<AlbumQuestion>(albumQuestions);
-
-  return shuffledQuestions
-    .slice(0, Math.min(count, albumQuestions.length))
-    .map((question): AlbumQuestion => ({
-      ...question,
-      options: shuffle<string>(question.options),
-    }));
-}
-
-function getIllustrationUrl(word: string): string | null {
-  const emoji = illustrations[word];
-
-  if (!emoji) return null;
-
-  const code = Array.from(emoji)
-    .filter((character) => character !== "\uFE0F")
-    .map((character) =>
-      character.codePointAt(0)!.toString(16).toUpperCase()
-    )
-    .join("-");
-
-  return `https://openmoji.org/data/color/svg/${code}.svg`;
-}
-
 export default function AlbumGame({ onBack }: AlbumGameProps) {
-  const [questions, setQuestions] = useState(() => createRound());
+  const [questions, setQuestions] = useState<GameQuestion[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const question = questions[questionIndex];
-  const isCorrect = selected === question.correctAnswer;
+  const isCorrect = selected === question?.correctAnswer;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadQuestions() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const generatedQuestions = await createRound(10);
+
+        if (!cancelled) {
+          setQuestions(generatedQuestions);
+          setQuestionIndex(0);
+          setSelected(null);
+          setShowHint(false);
+          setScore(0);
+          setFinished(false);
+        }
+      } catch (err) {
+        console.error("Error al generar las preguntas:", err);
+
+        if (!cancelled) {
+          setError(
+            "No hemos podido generar las preguntas. Comprueba tu conexión e inténtalo de nuevo."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadQuestions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function chooseAnswer(option: string) {
-    if (selected !== null) return;
+    if (selected !== null || !question) return;
 
     setSelected(option);
 
@@ -316,6 +73,8 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
   }
 
   function nextQuestion() {
+    if (!question) return;
+
     if (questionIndex === questions.length - 1) {
       setFinished(true);
       return;
@@ -326,13 +85,27 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
     setShowHint(false);
   }
 
-  function restartGame() {
-    setQuestions(createRound());
-    setQuestionIndex(0);
+  async function restartGame() {
+    setLoading(true);
+    setError(null);
     setSelected(null);
     setShowHint(false);
     setScore(0);
+    setQuestionIndex(0);
     setFinished(false);
+
+    try {
+      const generatedQuestions = await createRound(10);
+      setQuestions(generatedQuestions);
+    } catch (err) {
+      console.error("Error al crear una nueva partida:", err);
+
+      setError(
+        "No hemos podido crear una nueva partida. Inténtalo de nuevo."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -342,45 +115,90 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
       </button>
 
       <header className="game-heading">
-        <span className="eyebrow">🖼️ ÁLBUM DE LAS PALABRAS</span>
+        <span className="eyebrow">
+          🖼️ ÁLBUM DE LAS PALABRAS
+        </span>
+
         <h1>¡Encuentra la intrusa!</h1>
+
         <p>
           Observa las imágenes, encuentra la diferente
           y descubre por qué.
         </p>
       </header>
 
-      {finished ? (
-        <section className="game-panel completion-panel">
-          <div className="completion-emoji">🏆</div>
-          <h2>¡Álbum completado!</h2>
-          <p>
-            Has acertado {score} de {questions.length} preguntas.
-          </p>
-          <p>
-            ¡Cada palabra nueva es una oportunidad para aprender!
-          </p>
+      {loading ? (
+        <section className="game-panel" aria-live="polite">
+          <div className="completion-emoji">🧩</div>
+          <h2>Preparando tu álbum...</h2>
+          <p>Estamos buscando palabras y creando nuevas preguntas.</p>
+        </section>
+      ) : error ? (
+        <section className="game-panel" role="alert">
+          <div className="completion-emoji">😕</div>
+          <h2>No se ha podido cargar el juego</h2>
+          <p>{error}</p>
+
           <div className="game-actions">
-            <button className="button-primary" onClick={restartGame}>
-              Nueva partida
+            <button
+              className="button-primary"
+              onClick={restartGame}
+            >
+              Reintentar
             </button>
-            <button className="button-secondary" onClick={onBack}>
+
+            <button
+              className="button-secondary"
+              onClick={onBack}
+            >
               Volver al hub
             </button>
           </div>
         </section>
-      ) : (
+      ) : finished ? (
+        <section className="game-panel completion-panel">
+          <div className="completion-emoji">🏆</div>
+
+          <h2>¡Álbum completado!</h2>
+
+          <p>
+            Has acertado {score} de {questions.length} preguntas.
+          </p>
+
+          <p>
+            ¡Cada palabra nueva es una oportunidad para aprender!
+          </p>
+
+          <div className="game-actions">
+            <button
+              className="button-primary"
+              onClick={restartGame}
+            >
+              Nueva partida
+            </button>
+
+            <button
+              className="button-secondary"
+              onClick={onBack}
+            >
+              Volver al hub
+            </button>
+          </div>
+        </section>
+      ) : question ? (
         <section className="game-panel">
           <div className="progress-row">
             <span>
               Pregunta {questionIndex + 1} de {questions.length}
             </span>
+
             <span>⭐ Aciertos: {score}</span>
           </div>
 
           <div
             className="progress-track"
             role="progressbar"
+            aria-label="Progreso de la partida"
             aria-valuemin={0}
             aria-valuemax={questions.length}
             aria-valuenow={questionIndex + 1}
@@ -395,13 +213,19 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
             />
           </div>
 
-          <span className="category-pill">{question.category}</span>
-          <h2 className="question-title">{question.prompt}</h2>
+          <span className="category-pill">
+            {question.category}
+          </span>
+
+          <h2 className="question-title">
+            {question.prompt}
+          </h2>
 
           <div className="answer-grid">
-            {question.options.map((option:string) => {
-              const isSelected = selected === option;
-              const isAnswer = option === question.correctAnswer;
+            {question.options.map((option) => {
+              const isSelected = selected === option.word;
+              const isAnswer =
+                option.word === question.correctAnswer;
 
               let stateClass = "";
 
@@ -411,30 +235,22 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
                 stateClass = "answer-incorrect";
               }
 
-              const imageUrl = getIllustrationUrl(option);
-
               return (
                 <button
-                  key={option}
+                  key={option.word}
                   className={`answer-option ${stateClass}`}
-                  onClick={() => chooseAnswer(option)}
+                  onClick={() => chooseAnswer(option.word)}
                   disabled={selected !== null}
                   aria-pressed={isSelected}
                 >
-                  {imageUrl ? (
-                    <img
-                      className="answer-illustration"
-                      src={imageUrl}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span className="answer-emoji" aria-hidden="true">
-                      {illustrations[option] ?? "🖼️"}
-                    </span>
-                  )}
-                  <span>{option}</span>
+                  <span
+                    className="answer-emoji"
+                    aria-hidden="true"
+                  >
+                    {option.emoji}
+                  </span>
+
+                  <span>{option.word}</span>
                 </button>
               );
             })}
@@ -453,7 +269,10 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
                 onClick={() => setShowHint(true)}
                 disabled={showHint}
               >
-                💡 {showHint ? "Pista revelada" : "Necesito una pista"}
+                💡{" "}
+                {showHint
+                  ? "Pista revelada"
+                  : "Necesito una pista"}
               </button>
             </div>
           ) : (
@@ -464,7 +283,9 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
               role="status"
             >
               <h3>
-                {isCorrect ? "¡Muy bien! 🎉" : "¡Buen intento! 💛"}
+                {isCorrect
+                  ? "¡Muy bien! 🎉"
+                  : "¡Buen intento! 💛"}
               </h3>
 
               <p>{question.explanation}</p>
@@ -476,13 +297,27 @@ export default function AlbumGame({ onBack }: AlbumGameProps) {
                 </p>
               )}
 
-              <button className="button-primary" onClick={nextQuestion}>
+              <button
+                className="button-primary"
+                onClick={nextQuestion}
+              >
                 {questionIndex === questions.length - 1
                   ? "Ver resultado"
                   : "Siguiente pregunta →"}
               </button>
             </div>
           )}
+        </section>
+      ) : (
+        <section className="game-panel">
+          <p>No hay preguntas disponibles.</p>
+
+          <button
+            className="button-primary"
+            onClick={restartGame}
+          >
+            Generar preguntas
+          </button>
         </section>
       )}
     </main>

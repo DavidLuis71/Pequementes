@@ -27,7 +27,7 @@ export const games: GameInfo[] = [
     category: "Discriminación auditiva",
     emoji: "🔎",
     color: "#DBEAFE",
-    available: false,
+    available: true,
   },
   {
     id: "letter-train",
@@ -39,15 +39,28 @@ export const games: GameInfo[] = [
     color: "#EDE9FE",
     available: true,
   },
-  {
-    id: "factory",
-    title: "La fábrica de palabras",
-    description: "Construye palabras y juega con sus sonidos.",
-    category: "Conciencia fonológica",
-    emoji: "🏭",
-    color: "#D1FAE5",
-    available: false,
-  },
+
+{
+  id: "factory",
+  title: "El reto de las sílabas",
+  description:
+    "Escucha la sílaba y elige la respuesta correcta entre cuatro opciones.",
+  category: "Conciencia fonológica",
+  emoji: "🗣️",
+  color: "#D1FAE5",
+  available: true,
+},
+{
+  id: "sound-quiz",
+  title: "¿Qué sonido es?",
+  description:
+    "Escucha sonidos del mundo que te rodea y elige la imagen correcta.",
+  category: "Audición y lenguaje",
+  emoji: "👂",
+  color: "#FDE68A",
+  available: true,
+},
+
   {
     id: "stories",
     title: "Historias desordenadas",
@@ -55,6 +68,40 @@ export const games: GameInfo[] = [
     category: "Lenguaje narrativo",
     emoji: "📚",
     color: "#FEF3C7",
-    available: false,
+    available: true,
   },
+  
+  {
+    id: "reading",
+    title: "Detectives de lectura",
+    description:
+      "Lee historias creadas por inteligencia artificial y responde preguntas para demostrar lo que has comprendido.",
+    category: "Comprensión lectora",
+    emoji: "📖",
+    color: "#EDE9FE",
+    available: true,
+  },
+  
+  {
+    id: "letter-pairs",
+    title: "La fábrica de parejas",
+    description:
+      "Une cada letra mayúscula con su minúscula y ayuda a la fábrica a funcionar.",
+    category: "Lectoescritura",
+    emoji: "🏭",
+    color: "#F3E8FF",
+    available: true,
+  },
+  {
+  id: "syllable-domino",
+  title: "El dominó de las sílabas",
+  description:
+    "Arrastra, gira y coloca fichas para relacionar imágenes y sílabas.",
+  category: "Conciencia silábica",
+  emoji: "🁣",
+  color: "#FDE2E4",
+  available: true,
+},
+
+
 ];

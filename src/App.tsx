@@ -1,12 +1,26 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameCard from "./components/GameCard";
 import { games } from "./data/games";
 import AlbumGame from "./games/album/AlbumGame";
 import LettersGame from "./games/letters/LettersGame";
+import SoundsGame from "./games/sounds/SoundsGame";
+import SyllablesGame from "./games/syllables/SyllablesGame";
+import SoundGame from "./games/sound-quiz/SoundGame";
+import StoriesGame from "./games/storiesData/StoriesGame";
+import ReadingGame from "./games/reading/ReadingGame";
+import LetterPairsGame from "./games/letter-pairs/LetterPairsGame";
+import SyllableDominoGame from "./games/syllable-domino/SyllableDominoGame";
 
 export default function App() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
+  useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto",
+  });
+}, [activeGame]);
 
   if (activeGame === "album") {
     return <AlbumGame onBack={() => setActiveGame(null)} />;
@@ -15,6 +29,36 @@ export default function App() {
   if (activeGame === "letter-train") {
     return <LettersGame onBack={() => setActiveGame(null)} />;
   }
+
+  if (activeGame === "sounds") {
+    return <SoundsGame onBack={() => setActiveGame(null)} />;
+  }
+
+  if (activeGame === "factory") {
+  return (
+    <SyllablesGame
+      onBack={() => setActiveGame(null)}
+    />
+  );
+}
+if (activeGame === "sound-quiz") {
+  return <SoundGame onBack={() => setActiveGame(null)} />;
+}
+
+if (activeGame === "stories") {
+  return <StoriesGame onBack={() => setActiveGame(null)} />;
+}
+if (activeGame === "reading") {
+  return <ReadingGame onBack={() => setActiveGame(null)} />;
+}
+if (activeGame === "letter-pairs") {
+  return <LetterPairsGame onBack={() => setActiveGame(null)} />;
+}
+
+if (activeGame === "syllable-domino") {
+  return <SyllableDominoGame onBack={() => setActiveGame(null)} />;
+}
+
 
   return (
     <main className="hub-page">

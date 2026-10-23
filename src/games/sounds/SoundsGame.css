@@ -1,0 +1,113 @@
+
+.sound-letter-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin: 1.25rem auto;
+  padding: 1rem;
+  width: min(100%, 220px);
+  border-radius: 1.5rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sound-letter-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sound-letter {
+  font-size: clamp(3.5rem, 12vw, 5rem);
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+/* Selector de letras */
+.sound-letter-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.sound-letter-choice {
+  min-width: 3.25rem;
+  min-height: 3.25rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 1rem;
+  background: white;
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.sound-letter-choice:hover {
+  transform: translateY(-2px);
+}
+
+.sound-letter-choice.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: white;
+}
+
+/* Selectores de configuración */
+.game-panel select {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0 1.25rem;
+  padding: 0.85rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: white;
+  color: #1e293b;
+  font: inherit;
+}
+
+/* Resumen de la configuración */
+.sound-config-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+.sound-config-summary p {
+  margin: 0.25rem 0;
+}
+
+.sound-config-summary .sound-letter {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.sound-config-summary .sound-letter-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Emojis grandes: los botones mantienen sus dimensiones */
+.answer-option .answer-emoji {
+  display: block;
+  font-size: 4.5rem;
+  line-height: 1.1;
+}
+
+/* Centrar el emoji sin añadir espacio extra */
+.answer-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
